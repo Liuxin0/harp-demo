@@ -2,13 +2,9 @@
 
 **HARP: Source–Envelope Reconstruction for Lightweight Speech Bandwidth Extension**
 
-Project page: https://liuxin0.github.io/harp-demo/
+**[Open the live HARP demo](https://liuxin0.github.io/harp-demo/)**
 
 A dependency-free static research page with method illustrations, system results, controlled comparisons, four paired VCTK listening examples, and placeholders for unavailable conditions. It is not an online inference service. The manuscript and model release are not included.
-
-## Preview
-
-Run `node tools/serve.mjs` and open http://127.0.0.1:4173/. No package installation is required.
 
 ## Add verified audio
 
