@@ -4,7 +4,7 @@
 
 Project page: https://liuxin0.github.io/harp-demo/
 
-A dependency-free static research page with method illustrations, system results, controlled comparisons, and explicit listening-demo placeholders. It is not an online inference service. The manuscript and model release are not included.
+A dependency-free static research page with method illustrations, system results, controlled comparisons, four paired VCTK listening examples, and placeholders for unavailable conditions. It is not an online inference service. The manuscript and model release are not included.
 
 ## Preview
 
@@ -18,7 +18,7 @@ Run `node tools/serve.mjs` and open http://127.0.0.1:4173/. No package installat
 4. Keep HR-input / HR-fit examples in the **analysis-only** group. They use information unavailable at deployment.
 5. Preview all groups. Only non-empty paths produce audio players; missing files must not be represented as completed results.
 
-The initial manifest contains placeholders only. There are no published audio files or subjective ratings yet.
+The VCTK group contains four examples (16 WAV files); LibriSpeech and HR-analysis groups remain placeholders. No subjective ratings are reported. See `audio/README.md` for provenance and corpus attribution.
 
 ## Figures
 

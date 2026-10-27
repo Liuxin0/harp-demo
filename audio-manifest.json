@@ -1,16 +1,17 @@
 {
   "version": 1,
-  "status": "awaiting-verified-audio",
+  "status": "vctk-audio-ready-other-groups-pending",
   "groups": [
     {
       "id": "vctk",
-      "title": "VCTK · pending example selection",
-      "note": "Deployment comparison. Utterance IDs, degradation settings, and checkpoint provenance will be filled when verified audio is available.",
+      "title": "VCTK · matched deployment examples",
+      "note": "Four paired examples, covering two speakers and shorter/longer utterances. HARP uses the independently reproduced epoch-49 model, not an original three-seed checkpoint. These examples are illustrative, not a listening-test result.",
       "columns": [{"id":"lr","label":"LR input"},{"id":"plus","label":"HWB-plus"},{"id":"harp","label":"HARP"},{"id":"hr","label":"HR reference"}],
       "samples": [
-        {"label":"Example 1","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}},
-        {"label":"Example 2","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}},
-        {"label":"Example 3","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}}
+        {"label":"p283 · 104 / mic2","description":"2.332 s · 16 kHz · mono","utterance_id":"p283_104_mic2.wav","degradation":"Stored paired VCTK evaluation LR; no re-synthesis or gain change.","provenance":{"harp":"Independent reproduction, best epoch 49","plus":"Reimplemented baseline, epoch 50","files":"Sample-preserving float32 WAV export; HARP native samples retain PCM16 quantization."},"audio":{"lr":"audio/vctk/p283_104_mic2/lr.wav","plus":"audio/vctk/p283_104_mic2/plus.wav","harp":"audio/vctk/p283_104_mic2/harp.wav","hr":"audio/vctk/p283_104_mic2/hr.wav"}},
+        {"label":"p283 · 275 / mic2","description":"3.158 s · 16 kHz · mono","utterance_id":"p283_275_mic2.wav","degradation":"Stored paired VCTK evaluation LR; no re-synthesis or gain change.","provenance":{"harp":"Independent reproduction, best epoch 49","plus":"Reimplemented baseline, epoch 50","files":"Sample-preserving float32 WAV export; HARP native samples retain PCM16 quantization."},"audio":{"lr":"audio/vctk/p283_275_mic2/lr.wav","plus":"audio/vctk/p283_275_mic2/plus.wav","harp":"audio/vctk/p283_275_mic2/harp.wav","hr":"audio/vctk/p283_275_mic2/hr.wav"}},
+        {"label":"p360 · 366 / mic1","description":"2.286 s · 16 kHz · mono","utterance_id":"p360_366_mic1.wav","degradation":"Stored paired VCTK evaluation LR; no re-synthesis or gain change.","provenance":{"harp":"Independent reproduction, best epoch 49","plus":"Reimplemented baseline, epoch 50","files":"Sample-preserving float32 WAV export; HARP native samples retain PCM16 quantization."},"audio":{"lr":"audio/vctk/p360_366_mic1/lr.wav","plus":"audio/vctk/p360_366_mic1/plus.wav","harp":"audio/vctk/p360_366_mic1/harp.wav","hr":"audio/vctk/p360_366_mic1/hr.wav"}},
+        {"label":"p360 · 232 / mic2","description":"3.189 s · 16 kHz · mono","utterance_id":"p360_232_mic2.wav","degradation":"Stored paired VCTK evaluation LR; no re-synthesis or gain change.","provenance":{"harp":"Independent reproduction, best epoch 49","plus":"Reimplemented baseline, epoch 50","files":"Sample-preserving float32 WAV export; HARP native samples retain PCM16 quantization."},"audio":{"lr":"audio/vctk/p360_232_mic2/lr.wav","plus":"audio/vctk/p360_232_mic2/plus.wav","harp":"audio/vctk/p360_232_mic2/harp.wav","hr":"audio/vctk/p360_232_mic2/hr.wav"}}
       ]
     },
     {

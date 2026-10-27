@@ -25,7 +25,7 @@
       <p class="authors">Xin Liu · Liang Qiao · Shulin He · Hao Li · Xueliang Zhang<sup>†</sup></p>
       <p class="corresponding">† Corresponding author</p>
       <p class="hero-lead">A small network predicts how to shape and scale two reconstruction contributions. Speech structure determines how they become the missing high-frequency detail.</p>
-      <div class="resource-links"><span class="resource unavailable" aria-disabled="true">Paper <small>forthcoming</small></span><span class="resource unavailable" aria-disabled="true">Model &amp; code <small>forthcoming</small></span><a class="resource" href="assets/harp-method.drawio" download>Editable method diagram ↓</a><a class="resource primary" href="#listen">Listening demo <small>in preparation</small></a></div>
+      <div class="resource-links"><span class="resource unavailable" aria-disabled="true">Paper <small>forthcoming</small></span><span class="resource unavailable" aria-disabled="true">Model &amp; code <small>forthcoming</small></span><a class="resource" href="assets/harp-method.drawio" download>Editable method diagram ↓</a><a class="resource primary" href="#listen">Listen to VCTK examples ↓</a></div>
       <div class="headline-stats" aria-label="Main VCTK results">
         <div><strong>194K</strong><span>approx. parameters</span></div>
         <div><strong>21.67M</strong><span>approx. MACs / second</span></div>
@@ -47,7 +47,7 @@
       <p class="section-lead">HARP builds on our HWB / HWB-plus decoder. It introduces explicit branch frame gains, replaces learned fusion with direct magnitude addition, and repositions the former BGM block as LR-conditioned Aperiodic Envelope Activation (LAEA).</p>
       <figure class="diagram"><a href="assets/harp-overview.svg" target="_blank" rel="noopener"><img src="assets/harp-overview.svg" width="1440" height="750" loading="lazy" alt="Overall HARP flow: LR analysis, compact prediction of WGMM variables, dual-branch rendering, magnitude addition, and synthesis with phase-flipped LR phase; HR fitting is a separate analysis-only path."></a><figcaption>Overall pipeline. The HR-informed fitting path is analysis only; it supplies neither deployment input nor training supervision. <a href="assets/harp-method.drawio" download>Download the two-page draw.io source.</a></figcaption></figure>
       <div class="method-cards">
-        <article><span class="card-number">1</span><h3>Shape &amp; strength</h3><p>Two fixed-centre WGMM envelopes shape mixed and flat carriers. A positive frame gain gives each branch a direct overall-strength control.</p></article>
+        <article><span class="card-number">1</span><h3>Shape &amp; strength</h3><p>Two fixed-centre weighted Gaussian mixture model (WGMM) envelopes shape mixed and flat carriers. A positive frame gain gives each branch a direct overall-strength control.</p></article>
         <article><span class="card-number orange">2</span><h3>Local aperiodic calibration</h3><p>LAEA uses local LR information to adjust the assembled aperiodic log branch before composition. The periodic branch bypasses this module.</p></article>
         <article><span class="card-number green">3</span><h3>Direct composition</h3><p>The periodic contribution, calibrated aperiodic contribution, and observed LR magnitude are added. Inference uses phase-flipped LR phase.</p></article>
       </div>
@@ -100,12 +100,12 @@
 
     <section class="section tinted" id="listen"><div class="shell">
       <div class="section-heading"><span class="section-index">05 / LISTEN</span><h2>Compare the same utterance across systems.</h2></div>
-      <p class="section-lead">Audio examples are being prepared. Empty cells below are deliberate placeholders; no recordings or subjective scores are implied.</p>
+      <p class="section-lead">Listen to paired VCTK examples below. LibriSpeech and analysis-only examples remain placeholders. These demonstrations do not constitute a subjective listening study.</p>
       <div class="audio-filter" role="group" aria-label="Audio corpus"><button class="selected" data-corpus="vctk" aria-pressed="true">VCTK</button><button data-corpus="libri" aria-pressed="false">LibriSpeech</button><button data-corpus="analysis" aria-pressed="false">Analysis only</button></div>
       <div id="audio-notice" class="audio-notice" aria-live="polite"></div>
-      <div class="table-wrap audio-table-wrap"><table class="audio-table"><caption id="audio-caption">VCTK · pending example selection</caption><thead id="audio-head"></thead><tbody id="audio-body"></tbody></table></div>
-      <noscript><p>Enable JavaScript to view the audio placeholder matrix. Audio files have not yet been published.</p></noscript>
-      <p class="small-note">When added, each row will use one matched utterance and degradation across all columns. Analysis-only HR-input / HR-fit examples will remain separate from deployable systems. The replacement HARP run will be identified separately from the original three-seed statistics.</p>
+      <div class="table-wrap audio-table-wrap"><table class="audio-table"><caption id="audio-caption">VCTK · matched deployment examples</caption><thead id="audio-head"></thead><tbody id="audio-body"></tbody></table></div>
+      <noscript><p>Enable JavaScript to view the listening matrix. Audio paths and their provenance are also listed in <a href="audio-manifest.json">the audio manifest</a>.</p></noscript>
+      <p class="small-note">Each VCTK row preserves the same stored LR/HR pair and utterance duration across systems, with no demo-specific normalization or trimming. HARP audio comes from the new independent reproduction; it is separate from the original three-seed statistics. <a href="audio/README.md">Audio provenance and credits.</a></p>
     </div></section>
 
     <section class="section shell" id="resources">

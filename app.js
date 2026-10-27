@@ -48,7 +48,7 @@ function renderAudio(corpusId) {
       const src = sample.audio[column.id];
       if (typeof src === 'string' && src.trim()) {
         const audio = document.createElement('audio');
-        audio.controls = true; audio.preload = 'none'; audio.src = src;
+        audio.controls = true; audio.preload = 'metadata'; audio.src = src;
         audio.setAttribute('aria-label', `${sample.label}: ${column.label}`);
         audio.addEventListener('play', () => document.querySelectorAll('audio').forEach(other => { if (other !== audio) other.pause(); }));
         td.append(audio);
