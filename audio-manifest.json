@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "status": "awaiting-verified-audio",
+  "groups": [
+    {
+      "id": "vctk",
+      "title": "VCTK · pending example selection",
+      "note": "Deployment comparison. Utterance IDs, degradation settings, and checkpoint provenance will be filled when verified audio is available.",
+      "columns": [{"id":"lr","label":"LR input"},{"id":"plus","label":"HWB-plus"},{"id":"harp","label":"HARP"},{"id":"hr","label":"HR reference"}],
+      "samples": [
+        {"label":"Example 1","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}},
+        {"label":"Example 2","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}},
+        {"label":"Example 3","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}}
+      ]
+    },
+    {
+      "id": "libri",
+      "title": "LibriSpeech test-clean · pending example selection",
+      "note": "Systems independently trained on LibriSpeech. These examples will not be presented as zero-shot VCTK-to-LibriSpeech transfer.",
+      "columns": [{"id":"lr","label":"LR input"},{"id":"plus","label":"HWB-plus"},{"id":"harp","label":"HARP"},{"id":"hr","label":"HR reference"}],
+      "samples": [
+        {"label":"Example 1","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}},
+        {"label":"Example 2","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"plus":null,"harp":null,"hr":null}}
+      ]
+    },
+    {
+      "id": "analysis",
+      "title": "Analysis only · HR information unavailable at deployment",
+      "note": "HR-input and EM-style HR fitting use privileged target information. They are representational analyses, not deployable systems or training teachers.",
+      "columns": [{"id":"lr","label":"LR input"},{"id":"harp","label":"Deployed HARP"},{"id":"hr_input","label":"HR-input analysis"},{"id":"em_fit","label":"HR-fit analysis"},{"id":"hr","label":"HR reference"}],
+      "samples": [
+        {"label":"Analysis example","description":"Selection pending","utterance_id":null,"degradation":null,"provenance":null,"audio":{"lr":null,"harp":null,"hr_input":null,"em_fit":null,"hr":null}}
+      ]
+    }
+  ]
+}

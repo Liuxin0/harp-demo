@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+Thumbs.db
+assets/drawio-open-url.txt
+*.log
+preview-*.png
+tools/mobile-preview.html

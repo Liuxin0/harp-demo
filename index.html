@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HARP: source–envelope reconstruction for speech bandwidth extension with approximately 194K parameters. Method, controlled evidence, results, and listening-demo placeholders.">
+  <meta name="theme-color" content="#172d44">
+  <title>HARP · Lightweight Speech Bandwidth Extension</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav shell" aria-label="Main navigation">
+      <a class="wordmark" href="#top" aria-label="HARP home"><span class="harp-mark" aria-hidden="true">♮</span> HARP</a>
+      <div class="nav-links"><a href="#idea">Idea</a><a href="#method">Method</a><a href="#evidence">Evidence</a><a href="#results">Results</a><a href="#listen">Listen</a><a class="repo-link" href="https://github.com/Liuxin0/harp-demo">GitHub ↗</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero shell" id="top">
+      <p class="eyebrow">SPEECH STRUCTURE · COMPACT RECONSTRUCTION</p>
+      <h1><span>HARP</span><br>Source–Envelope Reconstruction for Lightweight Speech Bandwidth Extension</h1>
+      <p class="authors">Xin Liu · Liang Qiao · Shulin He · Hao Li · Xueliang Zhang<sup>†</sup></p>
+      <p class="corresponding">† Corresponding author</p>
+      <p class="hero-lead">A small network predicts how to shape and scale two reconstruction contributions. Speech structure determines how they become the missing high-frequency detail.</p>
+      <div class="resource-links"><span class="resource unavailable" aria-disabled="true">Paper <small>forthcoming</small></span><span class="resource unavailable" aria-disabled="true">Model &amp; code <small>forthcoming</small></span><a class="resource" href="assets/harp-method.drawio" download>Editable method diagram ↓</a><a class="resource primary" href="#listen">Listening demo <small>in preparation</small></a></div>
+      <div class="headline-stats" aria-label="Main VCTK results">
+        <div><strong>194K</strong><span>approx. parameters</span></div>
+        <div><strong>21.67M</strong><span>approx. MACs / second</span></div>
+        <div><strong>0.83 <i>→</i> 0.77</strong><span>LSD ↓ on VCTK</span></div>
+        <div><strong>3.11 <i>→</i> 3.38</strong><span>PESQ ↑ on VCTK</span></div>
+      </div>
+      <p class="budget-note">HWB-plus → HARP at the same reported compact budget. HARP scores are means over three training seeds.</p>
+    </section>
+
+    <section class="section tinted" id="idea"><div class="shell">
+      <div class="section-heading"><span class="section-index">01 / THE IDEA</span><h2>Give the network a reconstruction task with structure.</h2></div>
+      <div class="intro-columns"><p>Bandwidth-limited speech loses high-frequency cues. Recovering them requires inference: the low-resolution (LR) signal does not uniquely determine the original high-resolution (HR) signal.</p><p>With a very small model, how should acoustic knowledge guide reconstruction? HARP uses established source–envelope ideas to make branch strength, spectral shaping, and combination rules explicit—and separately testable.</p></div>
+      <figure class="concept-figure"><a href="assets/harp-concept.png" target="_blank" rel="noopener"><img src="assets/harp-concept.png" width="1984" height="794" alt="Conceptual illustration: band-limited speech enters a compact predictor that controls shape, strength, and local adjustment; periodic and noise-like contributions form a reconstructed spectrum."></a><figcaption>Intuition only: the illustrated waveforms and spectra are schematic, not measured results. The two contributions are designed reconstruction roles, not identified physical sources.</figcaption></figure>
+      <details class="plain-language"><summary>中文：用通俗的话说明 HARP</summary><p>可以把缺失高频的重建理解成“按规则补细节”。网络不用直接决定每一个谱点，而是预测两条支路的谱形和强度：一条借助已有的谐波支撑，另一条提供非周期的细节。增益调整体强度，LAEA 只校正非周期支路的局部变化，最后与保留的 LR 幅度相加。这里借鉴的是已有声学建模思想；本文的价值是把这些关系落实到极小预算的 BWE 中，并用对照实验检查各项设计的作用。</p></details>
+    </div></section>
+
+    <section class="section shell" id="method">
+      <div class="section-heading"><span class="section-index">02 / THE METHOD</span><h2>A compact predictor. An explicit reconstruction path.</h2></div>
+      <p class="section-lead">HARP builds on our HWB / HWB-plus decoder. It introduces explicit branch frame gains, replaces learned fusion with direct magnitude addition, and repositions the former BGM block as LR-conditioned Aperiodic Envelope Activation (LAEA).</p>
+      <figure class="diagram"><a href="assets/harp-overview.svg" target="_blank" rel="noopener"><img src="assets/harp-overview.svg" width="1440" height="750" loading="lazy" alt="Overall HARP flow: LR analysis, compact prediction of WGMM variables, dual-branch rendering, magnitude addition, and synthesis with phase-flipped LR phase; HR fitting is a separate analysis-only path."></a><figcaption>Overall pipeline. The HR-informed fitting path is analysis only; it supplies neither deployment input nor training supervision. <a href="assets/harp-method.drawio" download>Download the two-page draw.io source.</a></figcaption></figure>
+      <div class="method-cards">
+        <article><span class="card-number">1</span><h3>Shape &amp; strength</h3><p>Two fixed-centre WGMM envelopes shape mixed and flat carriers. A positive frame gain gives each branch a direct overall-strength control.</p></article>
+        <article><span class="card-number orange">2</span><h3>Local aperiodic calibration</h3><p>LAEA uses local LR information to adjust the assembled aperiodic log branch before composition. The periodic branch bypasses this module.</p></article>
+        <article><span class="card-number green">3</span><h3>Direct composition</h3><p>The periodic contribution, calibrated aperiodic contribution, and observed LR magnitude are added. Inference uses phase-flipped LR phase.</p></article>
+      </div>
+      <details class="technical"><summary>Inside the renderer: branch equations and LAEA</summary><figure class="diagram inset"><a href="assets/harp-renderer.svg" target="_blank" rel="noopener"><img src="assets/harp-renderer.svg" width="1440" height="710" loading="lazy" alt="Detailed renderer: periodic carrier times WGMM times gain; flat aperiodic carrier times WGMM times gain, followed by LAEA; both contributions add to LR magnitude."></a></figure><p>For candidate aperiodic magnitude <code>A</code>, LAEA forms <code>u = log A</code>, predicts <code>m = mask(u + log|LR|)</code>, and returns <code>exp(m · u)</code>. Thus it calibrates an exponent in the linear domain, rather than applying the ordinary mask <code>m · A</code>.</p><p class="small-note">The flat aperiodic carrier is deterministic (<code>exp(−1)</code>), not sampled noise. WGMM weights and spreads still affect level: explicit gain does not imply a unique shape–scale decomposition. Numerical logarithms follow the implementation's magnitude floor.</p></details>
+    </section>
+
+    <section class="section tinted" id="evidence"><div class="shell">
+      <div class="section-heading"><span class="section-index">03 / WHY THESE CHOICES?</span><h2>Three questions, three controlled comparisons.</h2></div>
+      <p class="section-lead">System scores show whether HARP helps. These experiments ask which choices matter and what the representation can express.</p>
+      <div class="evidence-tabs" role="tablist" aria-label="Controlled evidence">
+        <button role="tab" id="tab-gain" aria-controls="panel-gain" aria-selected="true" tabindex="0" data-panel="gain">Gain + composition</button>
+        <button role="tab" id="tab-laea" aria-controls="panel-laea" aria-selected="false" tabindex="-1" data-panel="laea">LAEA</button>
+        <button role="tab" id="tab-hr" aria-controls="panel-hr" aria-selected="false" tabindex="-1" data-panel="hr">Representation vs. prediction</button>
+      </div>
+      <article class="evidence-panel" id="panel-gain" role="tabpanel" aria-labelledby="tab-gain">
+        <div><p class="eyebrow">WHAT MAKES DIRECT ADDITION VIABLE?</p><h3>Explicit gain is essential when the learned gate is removed.</h3><p>With LAEA held on, direct addition without frame gains gives LSD 1.43. Adding gains brings it to 0.77. A learned gate with gains also reaches 0.77.</p><p class="interpretation">The evidence supports <strong>gain-enabled direct composition</strong>. It does not show that direct addition alone is better than a gate.</p></div>
+        <div class="mini-table"><table><caption>Composition × gain · single seed · LSD ↓</caption><thead><tr><th scope="col">Composition</th><th scope="col">No gain</th><th scope="col">Gain</th></tr></thead><tbody><tr><th scope="row">Direct addition</th><td>1.43</td><td class="highlight">0.77</td></tr><tr><th scope="row">Learned gate</th><td>0.78</td><td>0.77</td></tr></tbody></table></div>
+      </article>
+      <article class="evidence-panel" id="panel-laea" role="tabpanel" aria-labelledby="tab-laea" hidden>
+        <div><p class="eyebrow">DOES LOCAL APERIODIC CALIBRATION HELP?</p><h3>LAEA improves the same direct-addition + gain core.</h3><p>Turning LAEA on changes LSD from 0.80 to 0.77 and PESQ from 3.28 to 3.39. DNSMOS and NISQA also increase in this controlled single-seed comparison.</p><p class="interpretation">This supports the local correction's role in the complete core. It does not establish physical aperiodicity recovery or optimal placement among every possible branch design.</p></div>
+        <div class="mini-table"><table><caption>Matched core · single seed</caption><thead><tr><th scope="col">LAEA</th><th scope="col">LSD ↓</th><th scope="col">PESQ ↑</th></tr></thead><tbody><tr><th scope="row">Off</th><td>0.80</td><td>3.28</td></tr><tr><th scope="row">On</th><td class="highlight">0.77</td><td class="highlight">3.39</td></tr></tbody></table><p class="small-note">HR-reference branch diagnostic: aperiodic log loss 11.54 → 6.62; lower means closer to that reference.</p></div>
+      </article>
+      <article class="evidence-panel" id="panel-hr" role="tabpanel" aria-labelledby="tab-hr" hidden>
+        <div><p class="eyebrow">CAN THE RELATED REPRESENTATION EXPRESS THE TARGET?</p><h3>HR information reveals room beyond the deployed result.</h3><p>An independently trained HR-input encoder reaches 0.68 LSD. Direct HR-informed fitting in a related dual-carrier family reaches 0.65. These are complementary analyses, not deployable competitors.</p><p class="interpretation">The results support the representation's capacity and motivate better prediction from available LR cues. They do not prove that a larger LR encoder will close the gap, or that 0.65 is an LSD lower bound.</p></div>
+        <div class="mini-table"><table><caption>Analysis conditions · single seed · LSD ↓</caption><thead><tr><th scope="col">Condition</th><th scope="col">LSD</th><th scope="col">HR at test</th></tr></thead><tbody><tr><th scope="row">Deployed HARP</th><td>0.77</td><td>No</td></tr><tr><th scope="row">HR-input encoder</th><td>0.68</td><td>Yes</td></tr><tr><th scope="row">EM-style HR fit</th><td>0.65</td><td>Yes</td></tr></tbody></table><p class="small-note">The fit optimizes linear residual squared error, not LSD; its parameter family differs from the deployed model.</p></div>
+      </article>
+    </div></section>
+
+    <section class="section shell" id="results">
+      <div class="section-heading"><span class="section-index">04 / RESULTS</span><h2>Quality gains at the same compact budget.</h2></div>
+      <p class="section-lead">The main VCTK comparison is followed by an independently trained LibriSpeech evaluation and a supporting reduced-data study.</p>
+      <div class="table-wrap"><table class="results-table"><caption>VCTK · main system comparison</caption><thead><tr><th scope="col">System</th><th scope="col">Params (M) ↓</th><th scope="col">MAC/s (M) ↓</th><th scope="col">LSD ↓</th><th scope="col">DNSMOS ↑</th><th scope="col">PESQ ↑</th><th scope="col">NISQA ↑</th></tr></thead><tbody>
+        <tr><th scope="row">Sinc interpolation <sup>a</sup></th><td>—</td><td>—</td><td>3.26</td><td>2.90</td><td>3.11</td><td>2.85</td></tr>
+        <tr><th scope="row">AERO <sup>a</sup></th><td>19.41</td><td>35,780</td><td>0.90</td><td>3.29</td><td>2.84</td><td>3.54</td></tr>
+        <tr><th scope="row">BAE-Net <sup>a</sup></th><td>2.83</td><td>128</td><td>0.89</td><td>3.34</td><td>2.79</td><td>3.61</td></tr>
+        <tr><th scope="row">BAE-Lite <sup>a</sup></th><td>0.57</td><td>35</td><td>0.89</td><td>3.27</td><td>2.77</td><td>3.74</td></tr>
+        <tr><th scope="row">VM-ASR <sup>b</sup></th><td>6.13</td><td>980</td><td>0.79</td><td>3.29</td><td>2.98</td><td>3.62</td></tr>
+        <tr><th scope="row">AP-BWE <sup>b</sup></th><td>29.75</td><td>5,857</td><td>0.91</td><td>3.41</td><td>2.76</td><td>3.79</td></tr>
+        <tr><th scope="row">HWB-Net <sup>a</sup></th><td>0.200</td><td>≈21.67</td><td>0.94</td><td>3.35</td><td>2.85</td><td>3.86</td></tr>
+        <tr class="baseline"><th scope="row">HWB-plus <sup>b</sup></th><td>0.194</td><td>≈21.67</td><td>0.83</td><td>3.44</td><td>3.11</td><td>3.97</td></tr>
+        <tr class="ours"><th scope="row">HARP <span>ours · 3 seeds</span></th><td>0.194</td><td>≈21.67</td><td><strong>0.77</strong><small>±0.004</small></td><td><strong>3.49</strong><small>±0.01</small></td><td><strong>3.38</strong><small>±0.02</small></td><td><strong>3.99</strong><small>±0.03</small></td></tr>
+      </tbody></table></div>
+      <div class="table-notes"><p><sup>a</sup> Matched-protocol scores taken from our HWB-Net study. <sup>b</sup> Evaluated in the present study; HWB-plus is our reimplementation, not its previously published scores. External MACs retain each source's accounting convention; HWB-family values include WGMM reconstruction.</p><p>HARP reports mean ± sample standard deviation across three training seeds. Seed-matched paired tests against separately trained HWB-plus controls support consistent LSD, DNSMOS, and PESQ improvements; NISQA has no consistent significant advantage.</p></div>
+      <div class="support-grid">
+        <article class="support-card"><span class="tag">SECOND CORPUS</span><h3>LibriSpeech: similar LSD, higher PESQ.</h3><p>Both systems are trained from scratch on train-clean-100, selected on dev-clean, and evaluated on disjoint test-clean. This is additional-corpus replication, not zero-shot transfer.</p><div class="table-wrap"><table><caption class="sr-only">LibriSpeech independently trained comparison</caption><thead><tr><th>System</th><th>LSD ↓</th><th>DNSMOS ↑</th><th>PESQ ↑</th><th>NISQA ↑</th></tr></thead><tbody><tr><th>HWB-plus</th><td>0.933</td><td>3.438</td><td>2.487</td><td>3.279</td></tr><tr><th>HARP</th><td>0.926</td><td>3.426</td><td>2.687</td><td>3.234</td></tr></tbody></table></div><p class="small-note">Single training run per system. The 0.007 LSD difference is small; no-reference estimates are mixed and slightly favor HWB-plus.</p></article>
+        <article class="support-card"><span class="tag">REDUCED TRAINING DATA</span><h3>Supporting evidence under fewer training utterances.</h3><p>HARP has lower LSD than VM-ASR at 10%, 25%, 50%, and 100% of the VCTK training utterances, with the same 107 speakers retained.</p><div class="gap-pair"><div><strong>0.46</strong><span>LSD gap at 10% data</span></div><div><strong>0.02</strong><span>LSD gap at full data</span></div></div><p class="small-note">A system-level comparison, not an isolated causal test of priors. It does not establish reduced speaker requirements or lower training time.</p></article>
+      </div>
+      <details class="technical"><summary>Evaluation protocol and limits</summary><p>Both corpora use the same synthetic bandwidth degradation and 16 kHz reconstruction setup: a 2–3 kHz cutoff, Butterworth orders 5–10, and a 512-point Hann STFT with 256-sample hop. LibriSpeech follows the official train-clean-100 / dev-clean / test-clean split.</p><p>The inherited VCTK protocol uses p283/p360 for both validation and reporting (1,785 scored utterances). This can make absolute results optimistic; applying it consistently does not remove selection bias. LibriSpeech provides a separate dev/test check with broader speaker coverage. Both evaluations remain English-only with synthetic degradations; no human MOS study is reported.</p><p>The VCTK significance procedure uses two-sided paired sign-flip permutation tests with 10,000 permutations, within-seed Holm correction over four metrics, and agreement across three seed-matched comparisons. Its scope is HARP versus HWB-plus controls, not every external row.</p></details>
+    </section>
+
+    <section class="section tinted" id="listen"><div class="shell">
+      <div class="section-heading"><span class="section-index">05 / LISTEN</span><h2>Compare the same utterance across systems.</h2></div>
+      <p class="section-lead">Audio examples are being prepared. Empty cells below are deliberate placeholders; no recordings or subjective scores are implied.</p>
+      <div class="audio-filter" role="group" aria-label="Audio corpus"><button class="selected" data-corpus="vctk" aria-pressed="true">VCTK</button><button data-corpus="libri" aria-pressed="false">LibriSpeech</button><button data-corpus="analysis" aria-pressed="false">Analysis only</button></div>
+      <div id="audio-notice" class="audio-notice" aria-live="polite"></div>
+      <div class="table-wrap audio-table-wrap"><table class="audio-table"><caption id="audio-caption">VCTK · pending example selection</caption><thead id="audio-head"></thead><tbody id="audio-body"></tbody></table></div>
+      <noscript><p>Enable JavaScript to view the audio placeholder matrix. Audio files have not yet been published.</p></noscript>
+      <p class="small-note">When added, each row will use one matched utterance and degradation across all columns. Analysis-only HR-input / HR-fit examples will remain separate from deployable systems. The replacement HARP run will be identified separately from the original three-seed statistics.</p>
+    </div></section>
+
+    <section class="section shell" id="resources">
+      <div class="section-heading"><span class="section-index">06 / RESOURCES</span><h2>Build on the idea. Inspect the evidence.</h2></div>
+      <div class="resource-grid"><a href="https://github.com/Liuxin0/harp-demo"><span>Project page source</span><strong>GitHub ↗</strong><small>Page, data tables, and audio manifest</small></a><a href="assets/harp-method.drawio" download><span>Editable architecture</span><strong>draw.io ↓</strong><small>Overall pipeline + branch renderer</small></a><a href="https://doi.org/10.21437/Interspeech.2026-1498"><span>Our preceding work</span><strong>HWB-plus ↗</strong><small>Interspeech 2026 · pp. 4485–4489</small></a></div>
+      <p class="small-note">The HARP manuscript and model release will be linked here when available. This page is an explanation and listening companion, not an online inference service. Visual organization is inspired by the <a href="https://innerselfm.github.io/rezero/">ReZero project page</a>; all HARP graphics were created for this project.</p>
+    </section>
+  </main>
+  <footer><div class="shell"><a class="wordmark" href="#top">HARP</a><p>Small model. Explicit reconstruction roles.</p><span>Research companion · 2026</span></div></footer>
+</body>
+</html>

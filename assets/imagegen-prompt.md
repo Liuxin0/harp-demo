@@ -1,0 +1,12 @@
+# Concept illustration prompt
+
+Generated with the built-in imagegen tool on 2026-10-27. The diagram is a conceptual illustration, not a measured spectrogram or physical source decomposition.
+
+Use case: scientific-educational.
+Asset type: wide research project-page explanatory illustration for HARP, lightweight speech bandwidth extension.
+Create a crisp, editorial scientific infographic on white, in a restrained flat 2D illustration style with thin dark outlines, generous whitespace, rounded pale panels and three accent colors: blue for periodic structure, warm orange for aperiodic detail, and teal for reconstruction. Landscape 16:9 composition.
+Tell one simple left-to-right story, with three clear numbered stages. Stage 1 on the left: a small audio waveform above a stylized frequency spectrum showing only the lower-frequency part in dark grey, upper band shown as a faint dashed missing region. Exact title: "1. Band-limited speech". Small label: "High frequencies are missing".
+Stage 2 center: an intentionally small neural-network/control-box icon, with three clear knob icons for spectral shape, branch strength and local adjustment. Exact title: "2. Predict structured controls". Small label: "A compact neural predictor". Do not depict a large black-box model. The knobs are conceptual, not literal trainable parameter values.
+Stage 3 right: two stacked miniature schematic spectral tiles, first blue horizontal ridges labeled "Periodic contribution", second warm orange irregular fine texture labeled "Aperiodic contribution". A tiny adjustment slider icon touches ONLY the orange tile, labeled "Local calibration". The two feed a plus symbol together with a grey observed low-frequency strip, leading to a teal full-band spectrum, labeled "Reconstructed speech". Exact title: "3. Assemble the missing detail".
+Make the paths unambiguous, with blue and orange branches clearly distinct and both linked to the compact predictor. No HR signal or teacher enters the predictor. These contributions are reconstruction roles, not verified physical sources. Avoid anatomy, microphones, robots, 3D rendering, dense equations, decorative gradients and any real-looking quantitative axis values.
+At the bottom a quiet full-width line: "HARP: source-envelope reconstruction at a compact model budget". Add tiny footer "Conceptual illustration". Ensure every visible English label is spelled correctly and comfortably readable. Do not add metrics, fake experimental plots, extra labels, logos or watermarks.
