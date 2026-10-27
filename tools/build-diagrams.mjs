@@ -42,7 +42,7 @@ const pages=[{
  subtitle:'The branch roles are designed reconstruction contributions, not identified physical sources.',
  nodes:[
  n('bv',35,175,205,70,['Mixed carrier Bv','Harmonic support'],'periodic'),
- n('ev',345,75,255,70,['Periodic WGMM + frame gain','Ev(f,t) and Gv(t)'],'neural'),
+ n('ev',655,75,255,70,['Periodic WGMM + frame gain','Ev(f,t) and Gv(t)'],'neural'),
  n('pv',660,175,245,70,['Periodic contribution','Pv = Gv × Bv × Ev'],'periodic'),
  n('bc',35,345,205,70,['Flat carrier W','Deterministic support'],'aperiodic'),
  n('ec',345,455,255,70,['Aperiodic WGMM + frame gain','Ec(f,t) and Gc(t)'],'neural'),
@@ -55,7 +55,7 @@ const pages=[{
  n('explain',50,575,1340,90,['LAEA acts only on the assembled aperiodic log branch: u = log Apre; m = mask(u + log|LR|), 0 < m < 1.',
  'This is exponent calibration, not linear-amplitude masking. WGMM weights still affect level; gain is not a unique scale coordinate.'],'input',{plain:true})
  ],edges:[
- e('bv','pv',[[240,210],[660,210]],'#2563eb'),e('ev','pv',[[472,145],[472,165],[782,165],[782,175]],'#78648c'),
+ e('bv','pv',[[240,210],[660,210]],'#2563eb'),e('ev','pv',[[782,145],[782,175]],'#78648c'),
  e('bc','pre',[[240,380],[345,380]],'#c76530'),e('ec','pre',[[472,455],[472,415]],'#78648c'),
  e('pre','laea',[[600,380],[660,380]],'#c76530'),e('lr-local','laea',[[782,455],[782,415]],'#64748b',true),
  e('pv','addition',[[905,210],[1080,210],[1080,270]],'#2563eb'),
