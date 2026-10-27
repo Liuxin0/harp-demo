@@ -60,7 +60,7 @@ function renderAudio(corpusId) {
     body.append(row);
   }
 }
-fetch('audio-manifest.json').then(response => {
+fetch('audio-manifest.json?v=20261027-2').then(response => {
   if (!response.ok) throw new Error(`Audio manifest HTTP ${response.status}`);
   return response.json();
 }).then(data => {

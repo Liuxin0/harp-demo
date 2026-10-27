@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const html=await readFile(resolve(root,'index.html'),'utf8');
 const paths=[...html.matchAll(/(?:href|src)="([^"#]+)"/g)].map(m=>m[1]).filter(p=>!/^https?:/.test(p));
-for(const path of new Set(paths)) await access(resolve(root,path));
+for(const path of new Set(paths)) await access(resolve(root,path.split('?')[0]));
 const manifest=JSON.parse(await readFile(resolve(root,'audio-manifest.json'),'utf8'));
 let pending=0,ready=0;
 for(const group of manifest.groups){
